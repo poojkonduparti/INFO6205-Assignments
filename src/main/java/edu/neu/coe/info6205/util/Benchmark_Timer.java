@@ -4,6 +4,11 @@
 
 package edu.neu.coe.info6205.util;
 
+import edu.neu.coe.info6205.sort.elementary.InsertionSort;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -106,6 +111,92 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
      */
     public Benchmark_Timer(String description, Consumer<T> fRun, Consumer<T> fPost) {
         this(description, null, fRun, fPost);
+    }
+    public static void main(String[] args){
+        //insertion sort
+        InsertionSort insertion_sort = new InsertionSort();
+        Benchmark_Timer<Integer[]> benchmarkTimer = new Benchmark_Timer<>("Benchmark Test", null, a -> insertion_sort.sort(a,0,a.length),null);
+        // doubles the size of the array
+        for (int i = 20; i <1000; i =i*2) {
+            int j = i;
+            //timing a random ordered array
+
+            Supplier<Integer[]> supplier =  () -> {
+                Random random = new Random();
+                Integer[] array = new Integer[j];
+                //for generating a random array
+                for(int k = 0; k < j; k++){
+                    array[k] = random.nextInt(j*5);
+                }
+                return array;
+            };
+
+            double time = benchmarkTimer.runFromSupplier(supplier, 20);
+            System.out.println(time +"ns " + "is the time taken to sort a randomly ordered array of size" + i );
+
+
+        }
+        //timing a  partially ordered array for doubling n
+        for(int i = 20; i < 1000; i = i*2){
+            int j = i;
+            Supplier <Integer[]> supplier = ()->{
+                Random random = new Random();
+                Integer[] array = new Integer[j];
+                //generating a partially ordered array
+                for(int k=0;k< j; k++){
+                    array[k] = random.nextInt(j);
+                }
+                Arrays.sort(array);
+                int rearrangeArray = (int) (0.5*j); // rearranges half of the elements
+
+                for(int i1 = 0; i1 < rearrangeArray; i1++){
+                    int key = random.nextInt(j);
+                    array[key] = random.nextInt(j*10);
+
+                }
+                return array;
+            };
+            double time = benchmarkTimer.runFromSupplier(supplier, 20);
+            System.out.println(time +"ns " + "is the time taken to sort a partially ordered array of size" + i );
+
+        }
+        //timing an ordered array for doubling n
+        for(int i = 20; i <1000; i =i*2) {
+            int j =i;
+            Supplier<Integer[]> supplier = () -> {
+                Random random = new Random();
+                Integer[] array = new Integer [j];
+                for(int k = 0; k < j; k++){
+                    array[k] = random.nextInt(j*20);
+
+                }
+                Arrays.sort(array);
+                return array;
+
+            };
+            double time = benchmarkTimer.runFromSupplier(supplier, 20);
+            System.out.println(time +"ns " + "is the time taken to sort an ordered array of size" + i );
+
+        }
+        // timing a reverse ordered array
+        for(int i = 20; i < 1000;i= i*2){
+            int j = i;
+            Supplier <Integer[]> supplier = () -> {
+                Random random = new Random();
+                Integer [] array = new Integer[j];
+
+                for(int k = 0; k < j; k++){
+                    array[k] = random.nextInt(j);
+                }
+                Arrays.sort(array, Collections.reverseOrder());
+                return array;
+
+            };
+            double time = benchmarkTimer.runFromSupplier(supplier, 20);
+            System.out.println(time +"ns " + "is the time taken to sort a reverse ordered array of size" + i );
+
+        }
+
     }
 
     /**

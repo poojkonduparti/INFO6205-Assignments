@@ -21,6 +21,8 @@ public class RandomWalk {
      */
     private void move(int dx, int dy) {
         // TO BE IMPLEMENTED
+        x = x + dx;
+        y = y + dy;
     }
 
     /**
@@ -30,6 +32,10 @@ public class RandomWalk {
      */
     private void randomWalk(int m) {
         // TO BE IMPLEMENTED
+        for (int i = 0; i <= m; i++) {
+            randomMove();
+
+        }
     }
 
     /**
@@ -49,7 +55,9 @@ public class RandomWalk {
      */
     public double distance() {
         // TO BE IMPLEMENTED
-        return 0;
+        double dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        return (dist);
+
     }
 
     /**
@@ -70,13 +78,17 @@ public class RandomWalk {
     }
 
     public static void main(String[] args) {
-        if (args.length == 0)
-            throw new RuntimeException("Syntax: RandomWalk steps [experiments]");
-        int m = Integer.parseInt(args[0]);
-        int n = 30;
-        if (args.length > 1) n = Integer.parseInt(args[1]);
-        double meanDistance = randomWalkMulti(m, n);
-        System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
+        // if (args.length == 0)
+        //   throw new RuntimeException("Syntax: RandomWalk steps [experiments]");
+        // int m = Integer.parseInt(args[0]);
+        int a[] = {5, 20, 24, 35}; // array of inputs
+        int m = 0;
+        for (int i = 0; i <= 3; i++) {
+            m = a[i];
+            int n = 30;
+            if (args.length > 1) n = Integer.parseInt(args[1]);
+            double meanDistance = randomWalkMulti(m, n);
+            System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
+        }
     }
-
 }
