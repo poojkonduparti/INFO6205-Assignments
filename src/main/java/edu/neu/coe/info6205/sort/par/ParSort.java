@@ -1,7 +1,11 @@
 package edu.neu.coe.info6205.sort.par;
 
+
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * This code has been fleshed out by Ziyao Qiao. Thanks very much.
@@ -10,9 +14,16 @@ import java.util.concurrent.CompletableFuture;
 class ParSort {
 
     public static int cutoff = 1000;
+    public static ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(12);
 
+
+    private static int activeCount() {
+        return pool.getActiveCount();
+    }
     public static void sort(int[] array, int from, int to) {
         if (to - from < cutoff) Arrays.sort(array, from, to);
+        else if(activeCount() == pool.getCorePoolSize())
+            Arrays.sort(array, from, to);
         else {
             // FIXME next few lines should be removed from public repo.
             CompletableFuture<int[]> parsort1 = parsort(array, from, from + (to - from) / 2); // TO IMPLEMENT
@@ -51,6 +62,6 @@ class ParSort {
                     sort(result, 0, to - from);
                     return result;
                 }
-        );
+        , pool);
     }
 }
