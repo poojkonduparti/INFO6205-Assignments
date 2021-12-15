@@ -9,13 +9,10 @@ public class Pell {
         long[] pellNum;
         pellNum = new long[n+1];
         pellNum[0] = 0;
-        pellNumbers[1] = 1;
+        pellNum[1] = 1;
         for(int i=2;i<=n;i++) {
             pellNum[i] = 2*pellNum[i-1] + pellNum[i-2];
         }
         return pellNum[n];
-    }
-}
-        }
     }
 }
